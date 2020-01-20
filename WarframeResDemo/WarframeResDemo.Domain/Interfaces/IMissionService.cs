@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WarframeResDemo.Data.Entities;
 
 namespace WarframeResDemo.Domain.Interfaces
@@ -10,8 +8,10 @@ namespace WarframeResDemo.Domain.Interfaces
         void ChangeFraction(int missionId, int fractionId);
         void ChangeType(int missionId, int missionTypeId);
         void ChangeLevel(int missionId, int level);
-        void PauseMission(int missionId, int resourceId, int resourceCount);
-        int IsPaused(int missionId, int resourceId);
-        void EndMission(int missionId, int resourceId);
+        void StartMission(int missionId);
+        void PauseMission(int missionId, int progress);
+        int IsPaused(int missionId);
+        void EndMission(int missionId);
+        List<Mission> GetAllMissionsByPlanet(int planetId);
     }
 }

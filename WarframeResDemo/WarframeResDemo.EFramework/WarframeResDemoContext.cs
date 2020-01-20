@@ -19,6 +19,8 @@ namespace WarframeResDemo.EFr
         public DbSet<Resource> Resources { get; set; }
         public DbSet<Fraction> Fractions { get; set; }
         public DbSet<MissionType> MissionTypes { get; set; }
+        public DbSet<ExcavationType> ExcavationTypes { get; set; }
+        public DbSet<SurvivalType> SurvivalTypes { get; set; }
         public DbSet<PlanetResource> PlanetResource { get; set; }
         public DbSet<EndedMissions> EndedMissions { get; set; }
         public DbSet<PausedMission> PausedMissions { get; set; }

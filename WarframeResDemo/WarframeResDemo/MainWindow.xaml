@@ -4,27 +4,61 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WarframeResDemo"
+        xmlns:viewmodels="clr-namespace:WarframeResDemo.ViewModels"
+        xmlns:views ="clr-namespace:WarframeResDemo.Views"
         mc:Ignorable="d" 
         Title="WarframeResDemo" Height="450" Width="800"
-        Background="DarkGray">
+        Background="Gray">
+    <Window.Resources>
+        <DataTemplate x:Name="defaultViewTemplate" DataType="{x:Type viewmodels:DefaultViewModel}">
+            <views:DefaultView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate x:Name="excavationViewTemplate" DataType="{x:Type viewmodels:ExcavationVIewModel}">
+            <views:ExcavationView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate x:Name="survivalViewTemplate" DataType="{x:Type viewmodels:SurvivalViewModel}">
+            <views:SurvivalView DataContext="{Binding}"/>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="resourcesListBox" Margin="0,0,600,0" />
-        <ListBox x:Name="planetsListBox" Margin="200,0,400,0"/>
-        <ListBox x:Name="missionsListBox" Margin="400,0,200,0"/>
-        <TextBox x:Name="planetTextBox" HorizontalAlignment="Left" Margin="640,10,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="missionTextBox" HorizontalAlignment="Left" Margin="640,40,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="typeTextBox" HorizontalAlignment="Left" Margin="640,70,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="levelTextBox" HorizontalAlignment="Left" Margin="640,100,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="fractionTextBox" HorizontalAlignment="Left" Margin="640,130,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="resourceTextBox" HorizontalAlignment="Left" Margin="640,160,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="dropChanceTextBox" HorizontalAlignment="Left" Margin="640,190,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="farmButton" Content="Farm" HorizontalAlignment="Left" Margin="631,256,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-        <Label x:Name="farmLabel" Content="0/0" HorizontalAlignment="Left" Margin="710,253,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.342,-0.153" Visibility="Hidden"/>
-        <Label x:Name="clickLabel" Content="Click: " HorizontalAlignment="Left" Margin="710,284,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+            <StackPanel>
+                <ListBox x:Name="resourcesListBox" Height="435" />
+            </StackPanel>
+        </DockPanel>
+        <DockPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+            <StackPanel>
+                <ListBox x:Name="planetsListBox" Height="435"/>
+            </StackPanel>
+        </DockPanel>
+        <DockPanel Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+            <StackPanel>
+                <ListBox x:Name="missionsListBox" Height="435"/>
+            </StackPanel>
+        </DockPanel>
+        <DockPanel Background="Gray" Grid.Row="0" Grid.Column="3" Grid.RowSpan="1">
+            <StackPanel>
+                <TextBox x:Name="planetTextBox" HorizontalAlignment="Left" Margin="40,2,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                <TextBox x:Name="missionTextBox" HorizontalAlignment="Left" Margin="40,2,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                <TextBox x:Name="typeTextBox" HorizontalAlignment="Left" Margin="40,2,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                <TextBox x:Name="levelTextBox" HorizontalAlignment="Left" Margin="40,2,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                <TextBox x:Name="fractionTextBox" HorizontalAlignment="Left" Margin="40,2,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                <TextBox x:Name="resourceTextBox" HorizontalAlignment="Left" Margin="40,2,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                <TextBox x:Name="dropChanceTextBox" HorizontalAlignment="Left" Margin="40,2,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                <Button x:Name="startButton" HorizontalAlignment="Left" Margin="40,2,0,0" Content="Start" Width="120" Visibility="Visible" Click="StartButton_Click"/>
+                <Button x:Name="stopButton" HorizontalAlignment="Left" Margin="40,2,0,0" Content="Stop" Width="120" Visibility="Visible" Click="StopButton_Click"/>
+            </StackPanel>
+        </DockPanel>
+        <ContentControl Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="1" Grid.RowSpan="1" Content ="{Binding}"/>
     </Grid>
 </Window>

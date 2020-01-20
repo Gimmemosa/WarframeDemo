@@ -95,6 +95,22 @@ namespace WarframeResDemo.Domain.DefaultImplementations
             });
             _planetRepository.UpdatePlanet(planet);
         }
+
+        public List<Planet> GetAllPlanetsByResource(int resourceId)
+        {
+            List<Planet> planets = new List<Planet>();
+            _planetRepository.GetAllPlanets().ForEach(p =>
+            {
+                p.PlanetResource.ForEach(r =>
+                {
+                    if (r.ResourceId == resourceId)
+                    {
+                        planets.Add(p);
+                    }
+                });
+            });
+            return planets;
+        }
     }
     #endregion
 }

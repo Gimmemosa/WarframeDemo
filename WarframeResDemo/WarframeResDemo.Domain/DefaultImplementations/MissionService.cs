@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WarframeResDemo.Data.Entities;
 using WarframeResDemo.Data.Repositories;
 using WarframeResDemo.Domain.Interfaces;
@@ -48,22 +46,35 @@ namespace WarframeResDemo.Domain.DefaultImplementations
             _missionRepository.UpdateMission(mission);
         }
 
-        public void PauseMission(int missionId, int resourceId, int resourceCount)
+        public void StartMission(int missionId)
+        {
+             
+        }
+
+        public void PauseMission(int missionId, int progress)
         {
             var pausedMission = new PausedMission();
             pausedMission.MissionId = missionId;
-            pausedMission.ResourceId = resourceId;
-            pausedMission.ResourceCount = resourceCount;
+            pausedMission.Progress = progress;
+            _pausedMissionRepository.GetAllMissions().ForEach(m =>
+            {
+                if (m.MissionId == missionId)
+                {
+                    pausedMission.Id = m.Id;
+                    _pausedMissionRepository.UpdateMission(pausedMission);
+                    return;
+                }
+            });
             _pausedMissionRepository.CreateMission(pausedMission);
         }
 
-        public int IsPaused(int missionId, int resourceId)
+        public int IsPaused(int missionId)
         {
             int returningValue = 0;
             List<PausedMission> missions = _pausedMissionRepository.GetAllMissions();
             missions.ForEach(m =>
             {
-                if (m.MissionId == missionId && m.ResourceId == resourceId)
+                if (m.MissionId == missionId)
                 {
                     returningValue = m.Id;
                 }
@@ -71,20 +82,32 @@ namespace WarframeResDemo.Domain.DefaultImplementations
             return returningValue;
         }
 
-        public void EndMission(int missionId, int resourceId)
+        public void EndMission(int missionId)
         {
             var mission = new EndedMissions();
             mission.MissionId = missionId;
-            mission.ResourceId = resourceId;
             _endedMissionRepository.CreateMission(mission);
             List<PausedMission> missions = _pausedMissionRepository.GetAllMissions();
             missions.ForEach(m =>
             {
-                if (missionId == m.MissionId && resourceId == m.ResourceId)
+                if (missionId == m.MissionId)
                 {
                     _pausedMissionRepository.DeleteMission(m.Id);
                 }
             });
+        }
+
+        public List<Mission> GetAllMissionsByPlanet(int planetId)
+        {
+            List<Mission> missions = new List<Mission>();
+            _missionRepository.GetAllMissions().ForEach(m =>
+            {
+                if (m.PlanetId == planetId)
+                {
+                    missions.Add(m);
+                }
+            });
+            return missions;
         }
         #endregion
     }

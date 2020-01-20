@@ -10,6 +10,5 @@ namespace WarframeResDemo.Data.Entities
     {
         public int Id { get; set; }
         public int MissionId { get; set; }
-        public int ResourceId { get; set; }
     }
 }

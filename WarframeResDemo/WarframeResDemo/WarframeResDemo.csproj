@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
@@ -14,12 +14,29 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="Prism.Wpf" Version="7.2.0.1422" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WarframeResDemo.Data\WarframeResDemo.Data.csproj" />
     <ProjectReference Include="..\WarframeResDemo.Domain\WarframeResDemo.Domain.csproj" />
     <ProjectReference Include="..\WarframeResDemo.EFramework\WarframeResDemo.EFr.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AppData\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\DefaultView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SurvivalView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ExcavationView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

@@ -11,6 +11,8 @@ namespace WarframeResDemo.Domain.Interfaces
         void AddResource(int planetId, List<int> resourcesId);
         void AddMission(int planetId, int missionId);
         void AddMission(int planetId, List<int> missionsId);
-        
+        List<Planet> GetAllPlanetsByResource(int resourceId);
+
+
     }
 }
