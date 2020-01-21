@@ -10,17 +10,17 @@ namespace WarframeResDemo.ViewModels
 {
     public class SurvivalViewModel : DefaultViewModel, INotifyPropertyChanged
     {
-        public static string time;
-        private static int seconds;
-        private static int minutes;
-        private static Mission Mission;
-        private static Task timerTask;
-        private static CancellationTokenSource cancelTokenSource;
-        private static CancellationToken token;
+        private const string PropertyName = nameof(Time);
+        public string time;
+        private int seconds;
+        private int minutes;
+        private Task timerTask;
+        private CancellationTokenSource cancelTokenSource;
+        private CancellationToken token;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public static int Seconds
+        public int Seconds
         {
             get
             {
@@ -37,7 +37,7 @@ namespace WarframeResDemo.ViewModels
                 TimeToString();
             }
         }
-        public static int Minutes
+        public int Minutes
         {
             get
             {
@@ -48,7 +48,7 @@ namespace WarframeResDemo.ViewModels
                 minutes = value;
             }
         }
-        public static string Time
+        public string Time
         {
             get
             {
@@ -57,7 +57,7 @@ namespace WarframeResDemo.ViewModels
             set
             {
                 time = value;
-                ((SurvivalViewModel)(Model.viewModel)).OnPropertyChanged("Time");
+                this.OnPropertyChanged(PropertyName);
             }
         }
 
@@ -74,34 +74,36 @@ namespace WarframeResDemo.ViewModels
         #endregion Handlers
 
         #region Methods
-        public SurvivalViewModel()
+        public SurvivalViewModel(float progress, Mission mission, Resource resource)
         {
-            Mission = Model.mission;
-            Model.ViewModel = this;
+            Progress = progress;
+            Mission = mission;
+            Resource = resource;
             Minutes = 0;
-            SurvivalType type = (SurvivalType)(Mission.MissionType);
+            SurvivalType type = (SurvivalType)(mission.MissionType);
             Seconds = Convert.ToInt32(Math.Round((Progress * (type.Time.Minute * 60 + type.Time.Second) / 100), MidpointRounding.ToEven));
         }
-        private static void Count()
+        private void Count()
         {
             SurvivalType type = (SurvivalType)(Mission.MissionType);
-            for (int i = 0; i <= (type.Time.Minute * 60 + type.Time.Second); i++)
+            int less = (type.Time.Minute * 60 + type.Time.Second) - (Minutes * 60 + Seconds);
+            for (int i = 0; i <= less; i++)
             {
+                Thread.Sleep(1000);
                 if (token.IsCancellationRequested)
                 {
                     return;
                 }
                 Seconds++;
-                Thread.Sleep(1000);
             }
-            ((SurvivalViewModel)(Model.viewModel)).StopMission();
+            StopMission();
             return;
         }
         public void StopTimer()
         {
             cancelTokenSource.Cancel();
         }
-        public static void TimeToString()
+        public void TimeToString()
         {
             Time = string.Format("{0}:{1}", Minutes, Seconds);
         }
@@ -119,11 +121,12 @@ namespace WarframeResDemo.ViewModels
             StopTimer();
             SurvivalType type = (SurvivalType)(Mission.MissionType);
             Progress = (float)(Minutes * 60 + Seconds) / (float)(type.Time.Minute * 60 + type.Time.Second) * 100;
-            Model.PausedMission = new PausedMission
+            paused = new PausedMission
             {
                 Progress = Progress,
                 MissionId = Mission.Id
             };
+            base.StopMission();
         }
         #endregion Methods
     }

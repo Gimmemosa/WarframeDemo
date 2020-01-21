@@ -7,8 +7,14 @@ namespace WarframeResDemo.ViewModels
 {
     public class DefaultViewModel
     {
+        public Mission Mission;
+        public Resource Resource;
+        public PausedMission paused;
         public float Progress;
         public virtual void StartMission() { }
-        public virtual void StopMission() { }
+        public virtual void StopMission() { onMissionStop?.Invoke(paused); }
+
+        public delegate void MissionStop(PausedMission mission);
+        public event MissionStop onMissionStop;
     }
 }

@@ -1,13 +1,12 @@
 ﻿using WarframeResDemo.Data.Entities;
 using WarframeResDemo.ViewModels;
 
-namespace WarframeResDemo.Models
+namespace WarframeResDemo.Models.Deleted
 {
     public static class Model
     {
         public static Mission mission;
         public static Resource resource;
-        public static DefaultViewModel viewModel;
         public static PausedMission pausedMission;
         public static PausedMission PausedMission
         {
@@ -21,21 +20,6 @@ namespace WarframeResDemo.Models
                 onMissionStop.Invoke(pausedMission);
             }
         }
-        public static DefaultViewModel ViewModel
-        {
-            get
-            {
-                return viewModel;
-            }
-            set
-            {
-                viewModel = null;
-                viewModel = value;
-                onViewModelChanged?.Invoke(viewModel);
-            }
-        }
-        public delegate void VievModelChanged(DefaultViewModel viewModel);
-        public static event VievModelChanged onViewModelChanged;
         public delegate void MissionStop(PausedMission mission);
         public static event MissionStop onMissionStop;
     }

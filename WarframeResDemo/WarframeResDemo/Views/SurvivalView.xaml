@@ -9,9 +9,6 @@
              d:DesignHeight="217.02" d:DesignWidth="200"
              Background="Yellow">
     
-    <UserControl.DataContext>
-        <views:SurvivalViewModel/>
-    </UserControl.DataContext>
     <Grid>
         <TextBox x:Name="TextBox" HorizontalAlignment="Left" Margin="40,5,0,0" Text="Survival" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="TimerLabel" HorizontalAlignment="Left" Margin="40,45,0,0" VerticalAlignment="Top" Width="120" Text="{Binding Time, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>

@@ -15,10 +15,7 @@ namespace WarframeResDemo.ViewModels
         public const string PropertyName = nameof(Text);
         private string text;
         private int resourceCount;
-        private static int needResource;
-
-        private Mission Mission;
-        private Resource Resource;
+        private int needResource;
 
         public int ResourceCount
         {
@@ -42,7 +39,6 @@ namespace WarframeResDemo.ViewModels
             set
             {
                 text = value;
-                RaisePropertyChanged(PropertyName);
                 OnPropertyChanged(PropertyName);
             }
         }
@@ -72,13 +68,13 @@ namespace WarframeResDemo.ViewModels
         #endregion Handlers
 
         #region Methods
-        public ExcavationVIewModel()
+        public ExcavationVIewModel(float progress, Mission mission, Resource resource)
         {
+            Progress = progress;
+            Mission = mission;
+            Resource = resource;
             ButtonCommand = new RelayCommand(o => MainButtonClick("MainButton"));
-            Mission = Model.mission;
-            Resource = Model.resource;
-            Model.ViewModel = this;
-            ExcavationType type = (ExcavationType)(Mission.MissionType);
+            ExcavationType type = (ExcavationType)(mission.MissionType);
             needResource = type.FarmedResource;
             ResourceCount = Convert.ToInt32(Math.Round(Progress * needResource / 100, MidpointRounding.ToEven));
         }
@@ -93,12 +89,13 @@ namespace WarframeResDemo.ViewModels
         public override void StopMission()
         {
             ExcavationType type = (ExcavationType)(Mission.MissionType);
-            Progress = ResourceCount / type.FarmedResource * 100;
-            Model.PausedMission = new PausedMission
+            Progress = (float)ResourceCount / type.FarmedResource * 100;
+            paused = new PausedMission
             {
                 Progress = Progress,
-                MissionId = Model.mission.Id
+                MissionId = Mission.Id
             };
+            base.StopMission();
         }
         #endregion Methods
     }

@@ -97,7 +97,6 @@ namespace WarframeResDemo
                     }
                 });
             }
-            //StopFarm();
         }
         public void MissionListBox_Click(object sender, EventArgs e)
         {
@@ -108,13 +107,11 @@ namespace WarframeResDemo
                 {
                     if (m.MissionName == str)
                     {
-                        //StopFarm();
                         ShowInfo(m.Id);
                     }
                 });
             }
         }
-
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             MissionType type = new MissionType();
@@ -138,6 +135,7 @@ namespace WarframeResDemo
                 if (mission.Id == pM.MissionId)
                 {
                     progress = pM.Progress;
+                    pausedRepo.DeleteMission(pM.Id);
                 }
             });
 
@@ -152,38 +150,30 @@ namespace WarframeResDemo
                     }
                 });
             }
+            ViewModel?.StopMission();
             ViewModel = new DefaultViewModel();
-            Model.mission = mission;
-            Model.resource = res;
 
             /*------Добавление нового типа------*/
             if (type.GetType() == typeof(ExcavationType))
             {
-                DataContext = new ExcavationVIewModel { Progress = progress};
+                DataContext = ViewModel = new ExcavationVIewModel(progress, mission, res);
             }
             else if (type.GetType() == typeof(SurvivalType))
             {
-                DataContext = new SurvivalViewModel { Progress = progress};
+                DataContext = ViewModel = new SurvivalViewModel(progress, mission, res);
             }
             else
             {
-                DataContext = new DefaultViewModel();
+                DataContext = ViewModel = new DefaultViewModel();
             }
             /*----------------------------------*/
-            ViewModel = Model.ViewModel;
+            ViewModel.onMissionStop += onMissionStopHandler;
             ViewModel.StartMission();
-            Model.onMissionStop += onMissionStopHandler;
         }
-
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.StopMission();
         }
-        private void onViewModelChangedHandler(DefaultViewModel viewModel)
-        {
-            //Model.onMissionStop += onMissionStopHandler;
-        }
-
         public void onMissionStopHandler(PausedMission mission)
         {
             if (mission.Progress >= 100)
@@ -192,19 +182,13 @@ namespace WarframeResDemo
                 {
                     MissionId = mission.MissionId
                 };
-                pausedRepo.GetAllMissions().ForEach(p =>
-                {
-                    if (p.MissionId == mission.MissionId)
-                    {
-                        pausedRepo.DeleteMission(p.Id);
-                    }
-                });
                 endedRepo.CreateMission(ended);
                 MessageBox.Show("ура товарищи! Мы смогли!");
             }
             else
                 pausedRepo.CreateMission(mission);
-            DataContext = new DefaultViewModel();
+            ViewModel.onMissionStop -= onMissionStopHandler;
+            Dispatcher.Invoke(new Action(() => DataContext = new DefaultViewModel()));
         }
         #endregion Handlers
 
@@ -239,8 +223,6 @@ namespace WarframeResDemo
             resourcesListBox.SelectionChanged += new SelectionChangedEventHandler(ResourceListBox_Click);
             planetsListBox.SelectionChanged += new SelectionChangedEventHandler(PlanetListBox_Click);
             missionsListBox.SelectionChanged += new SelectionChangedEventHandler(MissionListBox_Click);
-
-            Model.onViewModelChanged += onViewModelChangedHandler;
 
             FillDatabase();
             LoadResources();
@@ -291,7 +273,6 @@ namespace WarframeResDemo
                     dropChanceTextBox.Text = "DropChanse: " + r.DropChance;
                 }
             });
-            DataContext = new DefaultViewModel();
         }
         #endregion Methods
     }
